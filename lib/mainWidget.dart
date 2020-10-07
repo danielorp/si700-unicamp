@@ -25,8 +25,8 @@ class MyFirstApp extends StatelessWidget {
                 ]),
               ),
               body: TabBarView(children: [
-                Center(child: generateProfileView()),
-                Center(child: Text("Filho 2")),
+                Center(child: generateProfileViewDaniel()),
+                Center(child: generateProfileViewGustavo()),
                 Center(child: generateContentView()),
               ])),
         ));
@@ -77,7 +77,7 @@ Widget generateContentView() {
   ));
 }
 
-Widget generateProfileView() {
+Widget generateProfileViewDaniel() {
   return Center(
       child: ListView(
     padding: const EdgeInsets.all(12),
@@ -110,6 +110,46 @@ Widget generateProfileView() {
           'de software para monitoração da rede/networking. '
           '\n\nEm meu tempo livre, gosto de estudar Linux e praticar violão e piano. Sou apaixonado por música, especialmente no que '
           'tange à gravação digital, sintetizadores, simulação e geração de instrumentos virtuais, utilização de controladores MIDI, etc.',
+          style: TextStyle(
+            fontSize: 14,
+            letterSpacing: 1,
+          ),
+          textAlign: TextAlign.left),
+    ],
+  ));
+}
+
+Widget generateProfileViewGustavo() {
+  return Center(
+      child: ListView(
+    padding: const EdgeInsets.all(12),
+    children: [
+      Container(
+        margin: EdgeInsets.all(2),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(0),
+            border: Border.all(color: Colors.black)),
+        child: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Image.asset('assets/images/gustavo.png')),
+      ),
+      Text('Gustavo Eleutério da Silva',
+          style: TextStyle(
+            fontSize: 25,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 1,
+          )),
+      Text('RA 174084',
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 1,
+          )),
+      Text(
+          '\nCurso Analise e desenvolvimento de Sistemas, estou no 8º semestre (tive alguns probleminhas de percurso rs).\n'
+          '\nAtualmente trabalho na Cielo, fazendo parte da equipe de sustentação das plataformas java. '
+          'Programação propriamente dita não é o que eu mais gosto nessa área, procuro estar sempre ligado nas novas tecnologias disponíveis e no mercado tecnológico de maneira geral.\n'
+          '\nNo meu tempo livre gosto de assistir séries e praticar esportes no geral!',
           style: TextStyle(
             fontSize: 14,
             letterSpacing: 1,
