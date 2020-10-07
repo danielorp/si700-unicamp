@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'sintaxe.dart';
-import 'synthaxWidget.dart';
+import 'mainWidget.dart';
 
 void main() {
   runApp(MyApp());
@@ -71,13 +70,10 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_initial_msg',
-              style: Theme.of(context).textTheme.headline4,
-            ),
+            Padding(
+                padding: EdgeInsets.all(30),
+                child: Text(
+                    'Clique no botão abaixo para visualizar o grupo da disciplina SI700')),
           ],
         ),
       ),

@@ -35,8 +35,7 @@ class MyFirstApp extends StatelessWidget {
 
 Widget generateProfileView() {
   return Center(
-      child: Column(
-    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      child: ListView(
     children: [
       Container(
         margin: EdgeInsets.all(20),
@@ -52,7 +51,22 @@ Widget generateProfileView() {
             fontSize: 25,
             fontWeight: FontWeight.bold,
             letterSpacing: 1,
-          ))
+          )),
+      Text('RA 169482',
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 1,
+          )),
+      Text(
+          """Atualmente curso Análise e Desenvolvimento de Sistemas, estando em meu sexto semestre.
+          Tenho especial predileção por programar em Python e Javascript, que são também as linguagens utilizadas
+          nos projetos nos quais me insiro em meu trabalho, no Itaú Unibanco.""",
+          style: TextStyle(
+            fontSize: 16,
+            letterSpacing: 1,
+          ),
+          textAlign: TextAlign.left),
     ],
   ));
 }
