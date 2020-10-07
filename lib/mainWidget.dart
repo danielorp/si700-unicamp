@@ -15,30 +15,73 @@ class MyFirstApp extends StatelessWidget {
           length: 3,
           child: Scaffold(
               appBar: AppBar(
-                title: Text('TOP 10 CELULARES'),
+                title: Text('Exercício 1 - SI700'),
                 bottom: TabBar(tabs: [
-                  Tab(icon: Icon(Icons.announcement)),
-                  Tab(icon: Icon(Icons.cake)),
-                  Tab(icon: Icon(Icons.cloud))
+                  Tab(icon: Icon(Icons.person)),
+                  Tab(icon: Icon(Icons.person)),
+                  Tab(icon: Icon(Icons.collections_bookmark))
                 ]),
               ),
               body: TabBarView(children: [
                 Center(child: generateProfileView()),
                 Center(child: Text("Filho 2")),
-                Center(child: Text("Filho 3")),
+                Center(child: generateContentView()),
               ])),
         ));
   }
 }
 
-//generateSynthaxView()
+Widget generateContentView() {
+  return Center(
+      child: ListView(
+    padding: const EdgeInsets.all(12),
+    children: [
+      Container(
+        margin: EdgeInsets.all(50),
+        child: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Image.asset('assets/images/github.png')),
+      ),
+      Text('Github Guide',
+          style: TextStyle(
+            fontSize: 25,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 1,
+          )),
+      Text(
+          '\nUma questão emergente ao se aprender uma nova linguagem de programação, seus principais paradigmas e arquiteturas, '
+          'é a dúvida: estou organizando e codificando da melhor maneira possível, a fim de que se tenha uma base de código '
+          'escalável e extensível?\n'
+          '\nMesmo conhecendo os principais design patterns, boas práticas e tendo em mãos a documentação do framework utilizado, '
+          'pode não ser fácil para um iniciante juntar todas essas peças. Entretanto, isso pode se tornar mais fácil se utilizarmos '
+          'como molde uma base de código madura, revisada por muitos programadores, que resolve problemas comuns do dia-a-dia de todo programador.\n '
+          '\nO objetivo do aplicativo será ajudar o usuário, a partir das respostas de um simples '
+          'questionário que traçará seu perfil, a conhecer os repositórios e projetos Open Source mais famosos '
+          'e, por consequência, pela Lei de Linus, mais bem estruturados.\n',
+          style: TextStyle(
+            fontSize: 14,
+            letterSpacing: 1,
+          ),
+          textAlign: TextAlign.left),
+      Text('"Given enough eyeballs, all bugs are shallow."\n',
+          style: TextStyle(
+              fontSize: 16, letterSpacing: 1, fontStyle: FontStyle.italic),
+          textAlign: TextAlign.center),
+      Text('Eric S. Raymond',
+          style: TextStyle(
+              fontSize: 14, letterSpacing: 1, fontWeight: FontWeight.bold),
+          textAlign: TextAlign.right),
+    ],
+  ));
+}
 
 Widget generateProfileView() {
   return Center(
       child: ListView(
+    padding: const EdgeInsets.all(12),
     children: [
       Container(
-        margin: EdgeInsets.all(20),
+        margin: EdgeInsets.all(2),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(0),
             border: Border.all(color: Colors.black)),
@@ -59,11 +102,14 @@ Widget generateProfileView() {
             letterSpacing: 1,
           )),
       Text(
-          """Atualmente curso Análise e Desenvolvimento de Sistemas, estando em meu sexto semestre.
-          Tenho especial predileção por programar em Python e Javascript, que são também as linguagens utilizadas
-          nos projetos nos quais me insiro em meu trabalho, no Itaú Unibanco.""",
+          '\nAtualmente curso Análise e Desenvolvimento de Sistemas, estando em meu sexto semestre.'
+          '\n\nTenho especial predileção por programar em Python e Javascript, que são também as linguagens utilizadas '
+          'nos projetos nos quais me insiro em meu trabalho, no Itaú Unibanco, estando em uma coordenação que desenvolve soluções '
+          'de software para monitoração da rede/networking. '
+          '\n\nEm meu tempo livre, gosto de estudar Linux e praticar violão e piano. Sou apaixonado por música, especialmente no que '
+          'tange à gravação digital, sintetizadores, simulação e geração de instrumentos virtuais, utilização de controladores MIDI, etc.',
           style: TextStyle(
-            fontSize: 16,
+            fontSize: 14,
             letterSpacing: 1,
           ),
           textAlign: TextAlign.left),
