@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       ),
       home: MyHomePage(
           title:
-              'Flutter Demo Home Page'), // Geralmente coloca-se um Scaffold nesse lugar, será a tela primeira que aparecerá
+              UPPER_TITLE), // Geralmente coloca-se um Scaffold nesse lugar, será a tela primeira que aparecerá
     );
   }
 }
@@ -41,8 +41,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String _initial_msg = "";
-
   void _incrementCounter() {
     setState(() {
       // This call to setState tells the Flutter framework that something has

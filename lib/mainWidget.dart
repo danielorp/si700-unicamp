@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 3° Aba: tema do trabalho da disciplina.
 */
 
+const UPPER_TITLE = 'Exercício 1 - SI700';
+
 class MyFirstApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -15,7 +17,7 @@ class MyFirstApp extends StatelessWidget {
           length: 3,
           child: Scaffold(
               appBar: AppBar(
-                title: Text('Exercício 1 - SI700'),
+                title: Text(UPPER_TITLE),
                 bottom: TabBar(tabs: [
                   Tab(icon: Icon(Icons.person)),
                   Tab(icon: Icon(Icons.person)),
@@ -56,7 +58,7 @@ Widget generateContentView() {
           'pode não ser fácil para um iniciante juntar todas essas peças. Entretanto, isso pode se tornar mais fácil se utilizarmos '
           'como molde uma base de código madura, revisada por muitos programadores, que resolve problemas comuns do dia-a-dia de todo programador.\n '
           '\nO objetivo do aplicativo será ajudar o usuário, a partir das respostas de um simples '
-          'questionário que traçará seu perfil, a conhecer os repositórios e projetos Open Source mais famosos '
+          'questionário que traçará seu perfil, a conhecer e navegar pelos repositórios e projetos Open Source mais famosos '
           'e, por consequência, pela Lei de Linus, mais bem estruturados.\n',
           style: TextStyle(
             fontSize: 14,
