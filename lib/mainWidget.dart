@@ -14,112 +14,130 @@ class MyFirstApp extends StatelessWidget {
     return MaterialApp(
         title: 'Meu primeiro app!',
         home: DefaultTabController(
-          length: 3,
+          length: 2,
           child: Scaffold(
               appBar: AppBar(
                 title: Text(UPPER_TITLE),
                 bottom: TabBar(tabs: [
                   Tab(icon: Icon(Icons.person)),
-                  Tab(icon: Icon(Icons.person)),
                   Tab(icon: Icon(Icons.collections_bookmark))
                 ]),
               ),
-              body: TabBarView(children: [
-                Center(child: generateProfileViewDaniel()),
-                Center(child: generateProfileViewGustavo()),
-                Center(child: generateContentView()),
-              ])),
+              body: TabBarView(
+                  children: [MyFirstFormWidget(), MySecondFormWidget()])),
         ));
   }
 }
 
-Widget generateContentView() {
-  return Center(
-      child: ListView(
-    padding: const EdgeInsets.all(12),
-    children: [
-      Container(
-        margin: EdgeInsets.all(50),
-        child: ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Image.asset('assets/images/github.png')),
-      ),
-      Text('Github Guide',
-          style: TextStyle(
-            fontSize: 25,
-            fontWeight: FontWeight.bold,
-            letterSpacing: 1,
-          )),
-      Text(
-          '\nUma questão emergente ao se aprender uma nova linguagem de programação, seus principais paradigmas e arquiteturas, '
-          'é a dúvida: estou organizando e codificando da melhor maneira possível, a fim de que se tenha uma base de código '
-          'escalável e extensível?\n'
-          '\nMesmo conhecendo os principais design patterns, boas práticas e tendo em mãos a documentação do framework utilizado, '
-          'pode não ser fácil para um iniciante juntar todas essas peças. Entretanto, isso pode se tornar mais fácil se utilizarmos '
-          'como molde uma base de código madura, revisada por muitos programadores, que resolve problemas comuns do dia-a-dia de todo programador.\n '
-          '\nO objetivo do aplicativo será ajudar o usuário, a partir das respostas de um simples '
-          'questionário que traçará seu perfil, a conhecer e navegar pelos repositórios e projetos Open Source mais famosos '
-          'e, por consequência, pela Lei de Linus, mais bem estruturados.\n',
-          style: TextStyle(
-            fontSize: 14,
-            letterSpacing: 1,
-          ),
-          textAlign: TextAlign.left),
-      Text('"Given enough eyeballs, all bugs are shallow."\n',
-          style: TextStyle(
-              fontSize: 16, letterSpacing: 1, fontStyle: FontStyle.italic),
-          textAlign: TextAlign.center),
-      Text('Eric S. Raymond',
-          style: TextStyle(
-              fontSize: 14, letterSpacing: 1, fontWeight: FontWeight.bold),
-          textAlign: TextAlign.right),
-    ],
-  ));
+class LoginData {
+  String username = "";
+  String password = "";
+
+  doSomething() {
+    print("Username: $username");
+    print("Password: $password");
+    print("");
+  }
 }
 
-Widget generateProfileViewDaniel() {
-  return Center(
-      child: ListView(
-    padding: const EdgeInsets.all(12),
-    children: [
-      Container(
-        margin: EdgeInsets.all(2),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(0),
-            border: Border.all(color: Colors.black)),
-        child: ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Image.asset('assets/images/daniel.png')),
-      ),
-      Text('Daniel Orpinelli',
-          style: TextStyle(
-            fontSize: 25,
-            fontWeight: FontWeight.bold,
-            letterSpacing: 1,
-          )),
-      Text('RA 169482',
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.bold,
-            letterSpacing: 1,
-          )),
-      Text(
-          '\nAtualmente curso Análise e Desenvolvimento de Sistemas, estando em meu sexto semestre.'
-          '\n\nTenho especial predileção por programar em Python e Javascript, que são também as linguagens utilizadas '
-          'nos projetos nos quais me insiro em meu trabalho, no Itaú Unibanco, estando em uma coordenação que desenvolve soluções '
-          'de software para monitoração da rede/networking. '
-          '\n\nEm meu tempo livre, gosto de estudar Linux e praticar violão e piano. Sou apaixonado por música, especialmente no que '
-          'tange à gravação digital, sintetizadores, simulação e geração de instrumentos virtuais, utilização de controladores MIDI, etc.',
-          style: TextStyle(
-            fontSize: 14,
-            letterSpacing: 1,
-          ),
-          textAlign: TextAlign.left),
-    ],
-  ));
+class MyFirstFormWidget extends StatelessWidget {
+  final GlobalKey<FormState> formKey = new GlobalKey<FormState>();
+  final LoginData loginData = new LoginData();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        padding: EdgeInsets.all(20.0),
+        child: Form(
+          key: formKey,
+          child: Column(children: [
+            TextFormField(
+              keyboardType: TextInputType.emailAddress,
+              validator: (String inValue) {
+                if (inValue.length == 0) {
+                  return "Please entender username";
+                }
+                return null;
+              },
+              onSaved: (String inValue) {
+                loginData.username = inValue;
+              },
+            ),
+            TextFormField(
+                obscureText: true,
+                validator: (String inValue) {
+                  if (inValue.length < 10) {
+                    return "Password precisa ser maior do que 10 caracteres";
+                  }
+                  return null;
+                },
+                onSaved: (String inValue) {
+                  loginData.password = inValue;
+                }),
+            RaisedButton(
+                child: Text("Login"),
+                onPressed: () {
+                  if (formKey.currentState.validate()) {
+                    formKey.currentState.save();
+                  }
+                })
+          ]),
+        ));
+  }
 }
 
-Widget generateProfileViewGustavo() {
+class SecondFormData {
+  var checkboxValue = false;
+  var switchValue = false;
+  var sliderValue = .3;
+  var radioValue = 1;
+
+  doSomething() {
+    print("Checkbox: $checkboxValue");
+    print("Switch: $switchValue");
+    print("Slider: $sliderValue");
+    print("Radio: $radioValue");
+  }
+}
+
+class MySecondFormWidget extends StatefulWidget {
+  final SecondFormData otherData = new SecondFormData();
+
+  @override
+  State<StatefulWidget> createState() {
+    return _MySecondFormWidgetState(otherData);
+  }
+}
+
+class _MySecondFormWidgetState extends State<MySecondFormWidget> {
+  GlobalKey<FormState> formKey = new GlobalKey<FormState>();
+  final SecondFormData otherData;
+
+  _MySecondFormWidgetState(this.otherData);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Form(
+          key: formKey,
+          child: Column(
+            children: [
+              Checkbox(
+                onChanged: (bool inValue) {
+                  setState(() {
+                    otherData.checkboxValue = inValue;
+                  });
+                },
+                value: otherData.checkboxValue,
+              ),
+            ],
+          )),
+      padding: EdgeInsets.all(50.0),
+    );
+  }
+}
+
+Widget generateForm() {
   return Center(
       child: ListView(
     padding: const EdgeInsets.all(12),
