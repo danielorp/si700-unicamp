@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:multiselect_formfield/multiselect_formfield.dart';
 
 /*
 1° Aba: foto, nome, semestre, com o que trabalho.
@@ -50,7 +51,7 @@ class _MyStatefulWidgetState extends State<MyInnerApp> {
         ra: 'RA 174084',
         descricao: GUSTAVO_DESCRICAO,
       ),
-      MySecondFormWidget()
+      LanguageForm()
     ];
   }
 
@@ -83,6 +84,128 @@ class _MyStatefulWidgetState extends State<MyInnerApp> {
         },
       ),
     );
+  }
+}
+
+class LoginData {
+  String username = "";
+  String password = "";
+
+  doSomething() {
+    print("Username: $username");
+    print("Password: $password");
+    print("");
+  }
+}
+
+class SearchFormData {
+  var sliderValue = .3;
+
+  doSomething() {
+    print("Slider: $sliderValue");
+  }
+}
+
+class LanguageForm extends StatefulWidget {
+  final SearchFormData searchFormData = new SearchFormData();
+
+  @override
+  State<StatefulWidget> createState() {
+    return LanguageFormState(searchFormData);
+  }
+}
+
+class LanguageFormState extends State<LanguageForm> {
+  final _formKey = GlobalKey<FormState>();
+  final LoginData loginData = new LoginData();
+  final SearchFormData searchFormData;
+
+  LanguageFormState(this.searchFormData);
+
+  @override
+  Widget build(BuildContext context) {
+    List _selectedOptions;
+    return Form(
+        key: _formKey,
+        child: Container(
+            padding: EdgeInsets.all(10),
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  TextFormField(
+                      decoration: const InputDecoration(
+                        hintText: 'Caso ainda não exista, usuário será criado.',
+                        labelText: 'Nome do  usuário',
+                      ),
+                      keyboardType: TextInputType.emailAddress,
+                      validator: (String inValue) {
+                        if (inValue.length == 0) {
+                          return "Please enter username";
+                        }
+                        return null;
+                      },
+                      onSaved: (String inValue) {
+                        loginData.username = inValue;
+                      }),
+                  MultiSelectFormField(
+                    autovalidate: false,
+                    chipBackGroundColor: Colors.red,
+                    chipLabelStyle: TextStyle(fontWeight: FontWeight.bold),
+                    dialogTextStyle: TextStyle(fontWeight: FontWeight.bold),
+                    checkBoxActiveColor: Colors.red,
+                    checkBoxCheckColor: Colors.green,
+                    dialogShapeBorder: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(12.0))),
+                    title: Text(
+                      'Selecione as linguagens da pesquisa.',
+                    ),
+                    //border: UnderlineInputBorder(borderSide: BorderSide.none,),
+                    dataSource: [
+                      {
+                        "display": "C",
+                        "value": "C",
+                      },
+                      {
+                        "display": "C++",
+                        "value": "C++",
+                      },
+                      {
+                        "display": "Python",
+                        "value": "Python",
+                      },
+                      {
+                        "display": "Java",
+                        "value": "Java",
+                      },
+                    ],
+                    textField: 'display',
+                    valueField: 'value',
+                    okButtonLabel: 'OK',
+                    cancelButtonLabel: 'Cancelar',
+                    hintWidget:
+                        Text('Toque para selecionar uma ou mais opções...'),
+                    onSaved: (value) {
+                      if (value == null) return;
+                      setState(() {
+                        _selectedOptions = value;
+                      });
+                    },
+                  ),
+                  Text('Escolha o nível de complexidade do repositório.',
+                      textAlign: TextAlign.left),
+                  Slider(
+                    divisions: 3,
+                    onChanged: (double value) {
+                      setState(() {
+                        searchFormData.sliderValue = value;
+                      });
+                    },
+                    label: 'Escolha o nível de complexidade do repositório.',
+                    value: searchFormData.sliderValue,
+                  ),
+                  // Add TextFormFields and RaisedButton here.
+                ])));
   }
 }
 
