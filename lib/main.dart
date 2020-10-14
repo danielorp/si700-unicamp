@@ -50,7 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
       // called again, and so nothing would appear to happen.
 
       Navigator.push(context,
-          MaterialPageRoute(builder: (BuildContext context) => MyFirstApp()));
+          MaterialPageRoute(builder: (BuildContext context) => MyInnerApp()));
     });
   }
 

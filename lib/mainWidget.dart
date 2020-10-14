@@ -6,83 +6,135 @@ import 'package:flutter/material.dart';
 3° Aba: tema do trabalho da disciplina.
 */
 
-const UPPER_TITLE = 'Exercício 1 - SI700';
+const UPPER_TITLE = 'Exercício 2 - SI700';
+const DANIEL_DESCRICAO =
+    '\nAtualmente curso Análise e Desenvolvimento de Sistemas, estando em meu sexto semestre.'
+    '\n\nTenho especial predileção por programar em Python e Javascript, que são também as linguagens utilizadas '
+    'nos projetos nos quais me insiro em meu trabalho, no Itaú Unibanco, estando em uma coordenação que desenvolve soluções '
+    'de software para monitoração da rede/networking. '
+    '\n\nEm meu tempo livre, gosto de estudar Linux e praticar violão e piano. Sou apaixonado por música, especialmente no que '
+    'tange à gravação digital, sintetizadores, simulação e geração de instrumentos virtuais, utilização de controladores MIDI, etc.';
+const GUSTAVO_DESCRICAO =
+    '\nCurso Analise e desenvolvimento de Sistemas, estou no 8º semestre (tive alguns probleminhas de percurso rs).\n'
+    '\nAtualmente trabalho na Cielo, fazendo parte da equipe de sustentação das plataformas java. '
+    'Programação propriamente dita não é o que eu mais gosto nessa área, procuro estar sempre ligado nas novas tecnologias disponíveis e no mercado tecnológico de maneira geral.\n'
+    '\nNo meu tempo livre gosto de assistir séries e praticar esportes no geral!';
 
-class MyFirstApp extends StatelessWidget {
+class MyInnerApp extends StatefulWidget {
+  MyInnerApp({Key key}) : super(key: key);
+
+  @override
+  _MyStatefulWidgetState createState() => _MyStatefulWidgetState();
+}
+
+class _MyStatefulWidgetState extends State<MyInnerApp> {
+  int _currentPage;
+  var _pages;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _currentPage = 0;
+    _pages = [
+      //Container(child: Text("Page 1 - Anúncios")),
+      GenerateProfileView(
+          imagePath: 'assets/images/daniel.png',
+          nome: 'Daniel Orpinelli',
+          ra: 'RA 169482',
+          descricao: DANIEL_DESCRICAO),
+
+      GenerateProfileView(
+        imagePath: 'assets/images/gustavo.png',
+        nome: 'Gustavo Eleutério da Silva',
+        ra: 'RA 174084',
+        descricao: GUSTAVO_DESCRICAO,
+      ),
+      MySecondFormWidget()
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Meu primeiro app!',
-        home: DefaultTabController(
-          length: 2,
-          child: Scaffold(
-              appBar: AppBar(
-                title: Text(UPPER_TITLE),
-                bottom: TabBar(tabs: [
-                  Tab(icon: Icon(Icons.person)),
-                  Tab(icon: Icon(Icons.collections_bookmark))
-                ]),
-              ),
-              body: TabBarView(
-                  children: [MyFirstFormWidget(), MySecondFormWidget()])),
-        ));
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(UPPER_TITLE),
+      ),
+      body: Center(
+        child: _pages.elementAt(_currentPage),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+              icon: Icon(Icons.person), title: Text('Membro 1')),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.person), title: Text('Membro 2')),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.collections_bookmark),
+            title: Text('Trabalho'),
+          ),
+        ],
+        currentIndex: _currentPage,
+        selectedItemColor: Colors.amber[800],
+        onTap: (int index) {
+          setState(() {
+            _currentPage = index;
+          });
+        },
+      ),
+    );
   }
 }
 
-class LoginData {
-  String username = "";
-  String password = "";
+class GenerateProfileView extends StatelessWidget {
+  const GenerateProfileView({
+    this.imagePath,
+    this.nome,
+    this.ra,
+    this.descricao,
+    Key key,
+  }) : super(key: key);
 
-  doSomething() {
-    print("Username: $username");
-    print("Password: $password");
-    print("");
-  }
-}
-
-class MyFirstFormWidget extends StatelessWidget {
-  final GlobalKey<FormState> formKey = new GlobalKey<FormState>();
-  final LoginData loginData = new LoginData();
+  final String imagePath;
+  final String nome;
+  final String ra;
+  final String descricao;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        padding: EdgeInsets.all(20.0),
-        child: Form(
-          key: formKey,
-          child: Column(children: [
-            TextFormField(
-              keyboardType: TextInputType.emailAddress,
-              validator: (String inValue) {
-                if (inValue.length == 0) {
-                  return "Please entender username";
-                }
-                return null;
-              },
-              onSaved: (String inValue) {
-                loginData.username = inValue;
-              },
+    return Center(
+        child: ListView(
+      padding: const EdgeInsets.all(12),
+      children: [
+        Container(
+          margin: EdgeInsets.all(2),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(0),
+              border: Border.all(color: Colors.black)),
+          child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Image.asset(this.imagePath)),
+        ),
+        Text(this.nome,
+            style: TextStyle(
+              fontSize: 25,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1,
+            )),
+        Text(this.ra,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1,
+            )),
+        Text(this.descricao,
+            style: TextStyle(
+              fontSize: 14,
+              letterSpacing: 1,
             ),
-            TextFormField(
-                obscureText: true,
-                validator: (String inValue) {
-                  if (inValue.length < 10) {
-                    return "Password precisa ser maior do que 10 caracteres";
-                  }
-                  return null;
-                },
-                onSaved: (String inValue) {
-                  loginData.password = inValue;
-                }),
-            RaisedButton(
-                child: Text("Login"),
-                onPressed: () {
-                  if (formKey.currentState.validate()) {
-                    formKey.currentState.save();
-                  }
-                })
-          ]),
-        ));
+            textAlign: TextAlign.left),
+      ],
+    ));
   }
 }
 
@@ -101,6 +153,9 @@ class SecondFormData {
 }
 
 class MySecondFormWidget extends StatefulWidget {
+  MySecondFormWidget({
+    Key key,
+  }) : super(key: key);
   final SecondFormData otherData = new SecondFormData();
 
   @override
@@ -130,87 +185,36 @@ class _MySecondFormWidgetState extends State<MySecondFormWidget> {
                 },
                 value: otherData.checkboxValue,
               ),
+              Switch(
+                onChanged: (bool value) {
+                  setState(() {
+                    otherData.switchValue = value;
+                  });
+                },
+                value: otherData.switchValue,
+              ),
+              Slider(
+                  min: 0,
+                  max: 20,
+                  value: otherData.sliderValue,
+                  onChanged: (double value) {
+                    setState(() {
+                      otherData.sliderValue = value;
+                    });
+                  }),
+              Row(
+                children: [
+                  Tooltip(
+                      message: "Nada de bom sairá desse botão",
+                      child: RaisedButton(
+                        child: Text("Não clique"),
+                        onPressed: () {},
+                      ))
+                ],
+              )
             ],
           )),
       padding: EdgeInsets.all(50.0),
     );
   }
-}
-
-Widget generateForm() {
-  return Center(
-      child: ListView(
-    padding: const EdgeInsets.all(12),
-    children: [
-      Container(
-        margin: EdgeInsets.all(2),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(0),
-            border: Border.all(color: Colors.black)),
-        child: ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Image.asset('assets/images/gustavo.png')),
-      ),
-      Text('Gustavo Eleutério da Silva',
-          style: TextStyle(
-            fontSize: 25,
-            fontWeight: FontWeight.bold,
-            letterSpacing: 1,
-          )),
-      Text('RA 174084',
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.bold,
-            letterSpacing: 1,
-          )),
-      Text(
-          '\nCurso Analise e desenvolvimento de Sistemas, estou no 8º semestre (tive alguns probleminhas de percurso rs).\n'
-          '\nAtualmente trabalho na Cielo, fazendo parte da equipe de sustentação das plataformas java. '
-          'Programação propriamente dita não é o que eu mais gosto nessa área, procuro estar sempre ligado nas novas tecnologias disponíveis e no mercado tecnológico de maneira geral.\n'
-          '\nNo meu tempo livre gosto de assistir séries e praticar esportes no geral!',
-          style: TextStyle(
-            fontSize: 14,
-            letterSpacing: 1,
-          ),
-          textAlign: TextAlign.left),
-    ],
-  ));
-}
-
-Widget generateSynthaxView() {
-  return Center(
-      child: Row(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      /*Padding(padding: EdgeInsets.all(30), child: Text('aaaa')),
-      Container(
-        padding: EdgeInsets.all(30),
-        child: Text('alooo'),
-        transform: new Matrix4.identity()..scale(2.0),
-      ),*/
-
-      /*ConstrainedBox(
-        constraints: BoxConstraints(minWidth: 50, minHeight: 50),
-        child: FittedBox(
-          fit: BoxFit.fill,
-          child: Text('alo'),
-        ),
-      )*/
-
-      Card(
-          child: Column(
-            children: [
-              Padding(padding: EdgeInsets.symmetric(horizontal: 50.0)),
-              Text('InnerChild1'),
-              Divider(),
-              Text('InnerChild2')
-            ],
-            mainAxisSize: MainAxisSize.min,
-          ),
-          color: Colors.blueAccent,
-          elevation: 10,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)))
-    ],
-  ));
 }
