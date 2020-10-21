@@ -24,7 +24,8 @@ dependencies:
   flutter:
     sdk: flutter
   multiselect_formfield: ^0.1.4
-
+  dartz:
+  mockito:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

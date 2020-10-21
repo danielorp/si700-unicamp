@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:multiselect_formfield/multiselect_formfield.dart';
 
+import 'modules/search/domain/repositories/search_repository.dart';
+import 'modules/search/domain/usecases/search_by_language.dart';
+
 /*
 1° Aba: foto, nome, semestre, com o que trabalho.
 2° Aba: apresentação da segunda pessoa.
 3° Aba: tema do trabalho da disciplina.
 */
 
-const UPPER_TITLE = 'Exercício 2 - SI700';
+const UPPER_TITLE = 'Trabalho 1 - SI700';
 const DANIEL_DESCRICAO =
     '\nAtualmente curso Análise e Desenvolvimento de Sistemas, estando em meu sexto semestre.'
     '\n\nTenho especial predileção por programar em Python e Javascript, que são também as linguagens utilizadas '
@@ -39,19 +42,12 @@ class _MyStatefulWidgetState extends State<MyInnerApp> {
     _currentPage = 0;
     _pages = [
       //Container(child: Text("Page 1 - Anúncios")),
+      LanguageForm(),
       GenerateProfileView(
           imagePath: 'assets/images/daniel.png',
           nome: 'Daniel Orpinelli',
           ra: 'RA 169482',
           descricao: DANIEL_DESCRICAO),
-
-      GenerateProfileView(
-        imagePath: 'assets/images/gustavo.png',
-        nome: 'Gustavo Eleutério da Silva',
-        ra: 'RA 174084',
-        descricao: GUSTAVO_DESCRICAO,
-      ),
-      InitialForm()
     ];
   }
 
@@ -69,11 +65,7 @@ class _MyStatefulWidgetState extends State<MyInnerApp> {
           BottomNavigationBarItem(
               icon: Icon(Icons.person), title: Text('Membro 1')),
           BottomNavigationBarItem(
-              icon: Icon(Icons.person), title: Text('Membro 2')),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.collections_bookmark),
-            title: Text('Trabalho'),
-          ),
+              icon: Icon(Icons.collections_bookmark), title: Text('Trabalho'))
         ],
         currentIndex: _currentPage,
         selectedItemColor: Colors.amber[800],
@@ -106,128 +98,154 @@ class SearchFormData {
   }
 }
 
-class InitialForm extends StatefulWidget {
+class ConfigAnimations {
+  var color = Colors.yellow;
+  var height = 100.0;
+  var width = 100.0;
+
+  var crossFadeFirst = true;
+}
+
+class LanguageForm extends StatefulWidget {
   final SearchFormData searchFormData = new SearchFormData();
 
   @override
   State<StatefulWidget> createState() {
-    return InitialFormState(searchFormData);
+    return LanguageFormState(searchFormData);
   }
 }
 
-class InitialFormState extends State<InitialForm> {
+class LanguageFormState extends State<LanguageForm> {
   final _formKey = GlobalKey<FormState>();
   final LoginData loginData = new LoginData();
   final SearchFormData searchFormData;
+  List _selectedOptions = [];
 
-  InitialFormState(this.searchFormData);
+  final List languageOptions = [
+    {
+      "display": "JavaScript",
+      "value": "JavaScript",
+    },
+    {
+      "display": "Python",
+      "value": "Python",
+    },
+    {
+      "display": "Java",
+      "value": "Java",
+    },
+    {
+      "display": "Go",
+      "value": "Go",
+    },
+    {
+      "display": "TypeScript",
+      "value": "TypeScript",
+    },
+    {
+      "display": "C++",
+      "value": "C++",
+    },
+    {
+      "display": "Ruby",
+      "value": "Ruby",
+    },
+    {
+      "display": "PHP",
+      "value": "PHP",
+    },
+    {
+      "display": "C#",
+      "value": "C#",
+    },
+    {
+      "display": "C",
+      "value": "C",
+    },
+    {
+      "display": "Dart",
+      "value": "Dart",
+    },
+  ];
+
+  LanguageFormState(this.searchFormData);
 
   @override
   Widget build(BuildContext context) {
-    List _selectedOptions;
     return Form(
         key: _formKey,
         child: Container(
             padding: EdgeInsets.all(10),
-            child: Column(children: <Widget>[
-              TextFormField(
-                  decoration: const InputDecoration(
-                    hintText: 'Caso ainda não exista, usuário será criado.',
-                    labelText: 'Nome do  usuário',
-                  ),
-                  keyboardType: TextInputType.emailAddress,
-                  validator: (String inValue) {
-                    if (inValue.length == 0) {
-                      return "Por favor, insira o usuário!";
-                    }
-                    return null;
-                  },
-                  onSaved: (String inValue) {
-                    loginData.username = inValue;
-                  }),
-              SizedBox(height: 10),
-              MultiSelectFormField(
-                autovalidate: false,
-                chipBackGroundColor: Colors.red,
-                chipLabelStyle: TextStyle(fontWeight: FontWeight.bold),
-                dialogTextStyle: TextStyle(fontWeight: FontWeight.bold),
-                checkBoxActiveColor: Colors.red,
-                checkBoxCheckColor: Colors.green,
-                dialogShapeBorder: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(12.0))),
-                title: Text(
-                  'Selecione as linguagens da pesquisa.',
-                ),
-                //border: UnderlineInputBorder(borderSide: BorderSide.none,),
-                dataSource: [
-                  {
-                    "display": "C",
-                    "value": "C",
-                  },
-                  {
-                    "display": "C++",
-                    "value": "C++",
-                  },
-                  {
-                    "display": "Python",
-                    "value": "Python",
-                  },
-                  {
-                    "display": "Java",
-                    "value": "Java",
-                  },
-                ],
-                textField: 'display',
-                valueField: 'value',
-                okButtonLabel: 'OK',
-                cancelButtonLabel: 'Cancelar',
-                hintWidget: Text('Toque para selecionar uma ou mais opções...'),
-                onSaved: (value) {
-                  if (value == null) return;
-                  setState(() {
-                    _selectedOptions = value;
-                  });
-                },
-              ),
-              SizedBox(height: 20),
-              Text('Escolha o nível de complexidade do repositório.',
-                  textAlign: TextAlign.left),
-              Slider(
-                divisions: 3,
-                onChanged: (double value) {
-                  setState(() {
-                    searchFormData.sliderValue = value;
-                  });
-                },
-                label: 'Escolha o nível de complexidade do repositório.',
-                value: searchFormData.sliderValue,
-              ),
-              SizedBox(height: 10),
-              Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 16.0),
-                      child: RaisedButton(
-                        onPressed: () {
-                          // Validate returns true if the form is valid, otherwise false.
-                          if (_formKey.currentState.validate()) {
-                            // If the form is valid, display a snackbar. In the real world,
-                            // you'd often call a server or save the information in a database.
-
-                            Scaffold.of(context).showSnackBar(
-                                SnackBar(content: Text('Processing Data')));
-                          }
-                        },
-                        child: Text('Submit'),
-                      ),
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  SizedBox(height: 10),
+                  MultiSelectFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Selecione as linguagens para a pesquisa!';
+                      }
+                      return null;
+                    },
+                    autovalidate: false,
+                    chipBackGroundColor: Colors.red,
+                    chipLabelStyle: TextStyle(fontWeight: FontWeight.bold),
+                    dialogTextStyle: TextStyle(fontWeight: FontWeight.bold),
+                    checkBoxActiveColor: Colors.red,
+                    checkBoxCheckColor: Colors.green,
+                    dialogShapeBorder: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(12.0))),
+                    title: Text(
+                      'Selecione as linguagens da pesquisa.',
                     ),
-                  ]),
-              // Add TextFormFields and RaisedButton here.
-            ])));
+                    //border: UnderlineInputBorder(borderSide: BorderSide.none,),
+                    dataSource: languageOptions,
+                    textField: 'display',
+                    valueField: 'value',
+                    okButtonLabel: 'OK',
+                    cancelButtonLabel: 'Cancelar',
+                    hintWidget:
+                        Text('Toque para selecionar uma ou mais opções...'),
+                    onSaved: (value) {
+                      if (value == null) return;
+                      setState(() {
+                        this._selectedOptions = value;
+                      });
+                    },
+                  ),
+                  SizedBox(height: 10),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: RaisedButton(
+                      onPressed: () async {
+                        if (_formKey.currentState.validate()) {
+                          Scaffold.of(context).showSnackBar(SnackBar(
+                              content: Text('Consultando API do Github...')));
+
+                          // Fazer consulta à API do Github...
+                          List languages = ['Dart', 'Python', 'Go'];
+
+                          final repository = SearchRepositoryGithub();
+                          final usecase = SearchByLanguageImpl(repository);
+                          var result = await usecase(languages);
+                          print(result);
+                        }
+                      },
+                      child: Text('Pesquisar'),
+                    ),
+                  ),
+                  // Add TextFormFields and RaisedButton here.
+                ])));
   }
 }
+
+Future<String> fetchUserOrder() =>
+    // Imagine that this function is
+    // more complex and slow.
+    Future.delayed(
+      Duration(seconds: 2),
+      () => 'Large Latte',
+    );
 
 class GenerateProfileView extends StatelessWidget {
   const GenerateProfileView({
