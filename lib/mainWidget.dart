@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:hello_world/modules/search/infra/repositories/search_repository_impl.dart';
 import 'package:multiselect_formfield/multiselect_formfield.dart';
 
-import 'modules/search/domain/repositories/search_repository.dart';
 import 'modules/search/domain/usecases/search_by_language.dart';
+import 'modules/search/external/datasources/github_datasources.dart';
 
 /*
 1° Aba: foto, nome, semestre, com o que trabalho.
@@ -224,11 +225,11 @@ class LanguageFormState extends State<LanguageForm> {
 
                           // Fazer consulta à API do Github...
                           List languages = ['Dart', 'Python', 'Go'];
-
-                          final repository = SearchRepositoryGithub();
-                          final usecase = SearchByLanguageImpl(repository);
-                          var result = await usecase(languages);
-                          print(result);
+                          final datasource = GithubDatasource();
+                          final repository = SearchRepositoryImpl(datasource);
+                          final search = await SearchByLanguageImpl(repository)
+                              .call(languages);
+                          print(search);
                         }
                       },
                       child: Text('Pesquisar'),

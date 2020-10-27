@@ -4,7 +4,7 @@ import 'package:hello_world/modules/search/domain/errors/errors.dart';
 import 'package:hello_world/modules/search/domain/repositories/search_repository.dart';
 
 abstract class SearchByLanguage {
-  Future<Either<FailureSearch, List<ResultSearch>>> call(List language);
+  Future<Either<FailureSearch, List<ResultSearch>>> call(List languages);
 }
 
 class SearchByLanguageImpl implements SearchByLanguage {
@@ -13,10 +13,10 @@ class SearchByLanguageImpl implements SearchByLanguage {
   SearchByLanguageImpl(this.repository);
 
   @override
-  Future<Either<FailureSearch, List<ResultSearch>>> call(List language) async {
-    if (language == null) {
+  Future<Either<FailureSearch, List<ResultSearch>>> call(List languages) async {
+    if (languages == null) {
       return Left(InvalidLanguageListError());
     }
-    return repository.search(language);
+    return await repository.search(languages);
   }
 }

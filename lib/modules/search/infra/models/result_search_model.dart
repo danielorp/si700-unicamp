@@ -30,15 +30,14 @@ class ResultSearchModel extends ResultSearch {
     if (map == null) return null;
 
     return ResultSearchModel(
-        repoUrl: map['repoUrl'],
+        repoUrl: map['url'],
         name: map['name'],
-        ownerName: map['ownerName'],
+        ownerName: map['owner']['login'],
         description: map['description'],
         language: map['language']);
   }
 
   String toJson() => json.encode(toMap());
 
-  static ResultSearchModel fromJson(String source) =>
-      fromMap(json.decode(source));
+  static ResultSearchModel fromJson(Map source) => fromMap(source);
 }
