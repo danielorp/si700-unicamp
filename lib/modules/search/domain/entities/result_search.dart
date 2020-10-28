@@ -1,14 +1,21 @@
-class ResultSearch {
+class RepoResult {
   final String repoUrl;
   final String name;
   final String ownerName;
   final String description;
-  final String language;
+  final Map<String, dynamic> originalRequest;
 
-  ResultSearch(
+  RepoResult(
       {this.repoUrl,
       this.name,
       this.ownerName,
       this.description,
-      this.language});
+      this.originalRequest});
+}
+
+class ResultSearch {
+  final String language;
+  final List<RepoResult> repos;
+
+  ResultSearch({this.language, this.repos});
 }

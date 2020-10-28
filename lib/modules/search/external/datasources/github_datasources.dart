@@ -7,6 +7,8 @@ import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
 class GithubDatasource implements SearchDataSource {
+  final List<ResultSearchModel> repositorios = [];
+
   @override
   Future<List<ResultSearchModel>> getSearch(List languages) async {
     // API do Github não suporta o operador OR, então temos que realizar cada consulta por linguagem individualmente.
@@ -15,23 +17,28 @@ class GithubDatasource implements SearchDataSource {
       responses.add(await http.get(
           "https://api.github.com/search/repositories?q=language:${language}&page=1&sort=stars"));
     }
-    final List<ResultSearchModel> list = [];
+
     for (var response in responses) {
       try {
         if (response.statusCode == 200) {
-          final jsoned = json.decode(response.body);
+          var jsoned = json.decode(response.body);
+          List<RepoResultModel> repositoriosIndividuais = [];
+
           for (var item in jsoned['items']) {
-            list.add(ResultSearchModel.fromJson(item));
+            repositoriosIndividuais.add(RepoResultModel.fromJson(item));
           }
+          repositorios
+              .add(ResultSearchModel.fromRepos(repositoriosIndividuais));
+
+          repositoriosIndividuais.clear();
         }
       } catch (e) {
         print(e);
       }
     }
-
     final anyResponseIs200 = (Response s) => s.statusCode == 200;
     if (responses.any(anyResponseIs200)) {
-      return list;
+      return repositorios;
     } else {
       throw DatasourceError();
     }
