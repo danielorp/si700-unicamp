@@ -29,10 +29,10 @@ class RepoResultModel extends RepoResult {
     if (map == null) return null;
 
     return RepoResultModel(
-        repoUrl: map['url'],
-        name: map['name'],
-        ownerName: map['owner']['login'],
-        description: map['description'],
+        repoUrl: map['html_url'] != null ? map['html_url'] : '',
+        name: map['name'] != null ? map['name'] : '',
+        ownerName: map['owner']['login'] != null ? map['owner']['login'] : '',
+        description: map['description'] != null ? map['description'] : '',
         originalRequest: map);
   }
 
