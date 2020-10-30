@@ -1,15 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hello_world/modules/search/infra/repositories/search_repository_impl.dart';
-import 'package:multiselect_formfield/multiselect_formfield.dart';
-
-import 'modules/search/domain/usecases/search_by_language.dart';
-import 'modules/search/external/datasources/github_datasources.dart';
-
-/*
-1° Aba: foto, nome, semestre, com o que trabalho.
-2° Aba: apresentação da segunda pessoa.
-3° Aba: tema do trabalho da disciplina.
-*/
+import 'languageFormWidget.dart';
 
 const UPPER_TITLE = 'Trabalho 1 - SI700';
 const DANIEL_DESCRICAO =
@@ -25,14 +15,14 @@ const GUSTAVO_DESCRICAO =
     'Programação propriamente dita não é o que eu mais gosto nessa área, procuro estar sempre ligado nas novas tecnologias disponíveis e no mercado tecnológico de maneira geral.\n'
     '\nNo meu tempo livre gosto de assistir séries e praticar esportes no geral!';
 
-class MyInnerApp extends StatefulWidget {
-  MyInnerApp({Key key}) : super(key: key);
+class DisplaySearchResults extends StatefulWidget {
+  DisplaySearchResults({Key key}) : super(key: key);
 
   @override
-  _MyStatefulWidgetState createState() => _MyStatefulWidgetState();
+  _DisplaySearchResultsState createState() => _DisplaySearchResultsState();
 }
 
-class _MyStatefulWidgetState extends State<MyInnerApp> {
+class _DisplaySearchResultsState extends State<DisplaySearchResults> {
   int _currentPage;
   var _pages;
 
@@ -43,7 +33,7 @@ class _MyStatefulWidgetState extends State<MyInnerApp> {
     _currentPage = 0;
     _pages = [
       //Container(child: Text("Page 1 - Anúncios")),
-      LanguageForm(),
+      LanguageList(),
       GenerateProfileView(
           imagePath: 'assets/images/daniel.png',
           nome: 'Daniel Orpinelli',
@@ -79,174 +69,6 @@ class _MyStatefulWidgetState extends State<MyInnerApp> {
     );
   }
 }
-
-class LoginData {
-  String username = "";
-  String password = "";
-
-  doSomething() {
-    print("Username: $username");
-    print("Password: $password");
-    print("");
-  }
-}
-
-class SearchFormData {
-  var sliderValue = .3;
-
-  doSomething() {
-    print("Slider: $sliderValue");
-  }
-}
-
-class ConfigAnimations {
-  var color = Colors.yellow;
-  var height = 100.0;
-  var width = 100.0;
-
-  var crossFadeFirst = true;
-}
-
-class LanguageForm extends StatefulWidget {
-  final SearchFormData searchFormData = new SearchFormData();
-
-  @override
-  State<StatefulWidget> createState() {
-    return LanguageFormState(searchFormData);
-  }
-}
-
-class LanguageFormState extends State<LanguageForm> {
-  final _formKey = GlobalKey<FormState>();
-  final LoginData loginData = new LoginData();
-  final SearchFormData searchFormData;
-  List _selectedOptions = [];
-
-  final List languageOptions = [
-    {
-      "display": "JavaScript",
-      "value": "JavaScript",
-    },
-    {
-      "display": "Python",
-      "value": "Python",
-    },
-    {
-      "display": "Java",
-      "value": "Java",
-    },
-    {
-      "display": "Go",
-      "value": "Go",
-    },
-    {
-      "display": "TypeScript",
-      "value": "TypeScript",
-    },
-    {
-      "display": "C++",
-      "value": "C++",
-    },
-    {
-      "display": "Ruby",
-      "value": "Ruby",
-    },
-    {
-      "display": "PHP",
-      "value": "PHP",
-    },
-    {
-      "display": "C#",
-      "value": "C#",
-    },
-    {
-      "display": "C",
-      "value": "C",
-    },
-    {
-      "display": "Dart",
-      "value": "Dart",
-    },
-  ];
-
-  LanguageFormState(this.searchFormData);
-
-  @override
-  Widget build(BuildContext context) {
-    return Form(
-        key: _formKey,
-        child: Container(
-            padding: EdgeInsets.all(10),
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  SizedBox(height: 10),
-                  MultiSelectFormField(
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Selecione as linguagens para a pesquisa!';
-                      }
-                      return null;
-                    },
-                    autovalidate: false,
-                    chipBackGroundColor: Colors.red,
-                    chipLabelStyle: TextStyle(fontWeight: FontWeight.bold),
-                    dialogTextStyle: TextStyle(fontWeight: FontWeight.bold),
-                    checkBoxActiveColor: Colors.red,
-                    checkBoxCheckColor: Colors.green,
-                    dialogShapeBorder: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(12.0))),
-                    title: Text(
-                      'Selecione as linguagens da pesquisa.',
-                    ),
-                    //border: UnderlineInputBorder(borderSide: BorderSide.none,),
-                    dataSource: languageOptions,
-                    textField: 'display',
-                    valueField: 'value',
-                    okButtonLabel: 'OK',
-                    cancelButtonLabel: 'Cancelar',
-                    hintWidget:
-                        Text('Toque para selecionar uma ou mais opções...'),
-                    onSaved: (value) {
-                      if (value == null) return;
-                      setState(() {
-                        this._selectedOptions = value;
-                      });
-                    },
-                  ),
-                  SizedBox(height: 10),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 16.0),
-                    child: RaisedButton(
-                      onPressed: () async {
-                        if (_formKey.currentState.validate()) {
-                          Scaffold.of(context).showSnackBar(SnackBar(
-                              content: Text('Consultando API do Github...')));
-
-                          // Fazer consulta à API do Github...
-                          List languages = ['Dart', 'Python', 'Go'];
-                          final datasource = GithubDatasource();
-                          final repository = SearchRepositoryImpl(datasource);
-                          final search = await SearchByLanguageImpl(repository)
-                              .call(languages);
-                          print(search);
-                        }
-                      },
-                      child: Text('Pesquisar'),
-                    ),
-                  ),
-                  // Add TextFormFields and RaisedButton here.
-                ])));
-  }
-}
-
-Future<String> fetchUserOrder() =>
-    // Imagine that this function is
-    // more complex and slow.
-    Future.delayed(
-      Duration(seconds: 2),
-      () => 'Large Latte',
-    );
 
 class GenerateProfileView extends StatelessWidget {
   const GenerateProfileView({
