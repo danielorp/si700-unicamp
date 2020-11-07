@@ -3,6 +3,7 @@ class RepoResult {
   final String name;
   final String ownerName;
   final String description;
+  final int stars;
   final Map<String, dynamic> originalRequest;
 
   RepoResult(
@@ -10,6 +11,7 @@ class RepoResult {
       this.name,
       this.ownerName,
       this.description,
+      this.stars,
       this.originalRequest});
 }
 

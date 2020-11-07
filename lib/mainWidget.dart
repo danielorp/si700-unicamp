@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'languageFormWidget.dart';
 
 const UPPER_TITLE = 'Trabalho 1 - SI700';
 const DANIEL_DESCRICAO =
@@ -33,7 +32,7 @@ class _DisplaySearchResultsState extends State<DisplaySearchResults> {
     _currentPage = 0;
     _pages = [
       //Container(child: Text("Page 1 - Anúncios")),
-      LanguageList(),
+      DisplaySearchResults(),
       GenerateProfileView(
           imagePath: 'assets/images/daniel.png',
           nome: 'Daniel Orpinelli',

@@ -7,6 +7,7 @@ class RepoResultModel extends RepoResult {
   final String name;
   final String ownerName;
   final String description;
+  final int stars;
   final Map<String, dynamic> originalRequest;
 
   RepoResultModel(
@@ -14,6 +15,7 @@ class RepoResultModel extends RepoResult {
       this.name,
       this.ownerName,
       this.description,
+      this.stars,
       this.originalRequest});
 
   Map<String, dynamic> toMap() {
@@ -21,7 +23,8 @@ class RepoResultModel extends RepoResult {
       'repoUrl': repoUrl,
       'name': name,
       'ownerName': ownerName,
-      'description': description
+      'description': description,
+      'stars': stars
     };
   }
 
@@ -33,6 +36,7 @@ class RepoResultModel extends RepoResult {
         name: map['name'] != null ? map['name'] : '',
         ownerName: map['owner']['login'] != null ? map['owner']['login'] : '',
         description: map['description'] != null ? map['description'] : '',
+        stars: map['stargazers_count'],
         originalRequest: map);
   }
 
@@ -64,6 +68,13 @@ class ResultSearchModel extends ResultSearch {
 
   String toJson() => json.encode(toMap());
 
-  static ResultSearchModel fromRepos(List<RepoResultModel> repos) =>
-      fromMap(repos);
+  static ResultSearchModel fromRepos(List<RepoResultModel> repos) {
+    final sorting = sortByStars(repos);
+    return fromMap(sorting);
+  }
+
+  static sortByStars(List<RepoResultModel> repos) {
+    repos.sort((a, b) => (b.stars).compareTo(a.stars));
+    return repos;
+  }
 }
