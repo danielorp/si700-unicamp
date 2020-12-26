@@ -7,7 +7,8 @@
         {
             "name": "flutter-app-1",
             "request": "launch",
-            "type": "dart"
+            "type": "dart",
+            "args": ["-d", "segundo"]
         }
     ]
 }

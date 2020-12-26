@@ -1,41 +1,28 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'languageFormWidget.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hello_world/bloc/auth_bloc.dart';
+import 'package:hello_world/views/wrapper.dart';
 
-void main() {
+String appTitle = 'MyRepos';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: UPPER_TITLE, // Como é mostrado no celular em si.
-      theme: ThemeData.dark(),
-      home: InitialForm(
-          title:
-              UPPER_TITLE), // Geralmente coloca-se um Scaffold nesse lugar, será a tela primeira que aparecerá
-    );
-  }
-}
-
-class InitialForm extends StatefulWidget {
-  InitialForm({Key key, this.title}) : super(key: key);
-  final String title;
-
-  @override
-  _InitialFormState createState() => _InitialFormState();
-}
-
-class _InitialFormState extends State<InitialForm> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Column(
-        children: <Widget>[LanguageForm()],
-      ),
-    );
+    return BlocProvider(
+        create: (context) => AuthBloc(),
+        child: MaterialApp(
+            title: appTitle, // Como é mostrado no celular em si.
+            theme: ThemeData(
+              primarySwatch: Colors.blue,
+              visualDensity: VisualDensity.adaptivePlatformDensity,
+            ),
+            home: Wrapper()));
   }
 }

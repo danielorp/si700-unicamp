@@ -1,9 +1,15 @@
 import 'package:dartz/dartz.dart' as dartz;
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hello_world/main.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:hello_world/modules/search/domain/errors/errors.dart';
 import 'package:multiselect_formfield/multiselect_formfield.dart';
+import 'bloc/database_bloc.dart';
+import 'bloc/database_event.dart';
+import 'models/preference_models.dart';
 import 'modules/search/domain/entities/result_search.dart';
 import 'modules/search/domain/usecases/search_by_language.dart';
 import 'modules/search/external/datasources/github_datasources.dart';
@@ -11,14 +17,10 @@ import 'modules/search/infra/models/result_search_model.dart';
 import 'modules/search/infra/repositories/search_repository_impl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-String UPPER_TITLE = 'Trabalho 2';
-
-List LANGUAGE_OPTIONS = [
+List languageOptions = [
   {
     "display": "JavaScript",
     "value": "JavaScript",
-    // TODO: Utilizar ícone com a imagem da linguagem.
-    "img": "assets/images/language_icons/javascript.png"
   },
   {
     "display": "Python",
@@ -72,6 +74,7 @@ class LanguageForm extends StatefulWidget {
 class LanguageFormState extends State<LanguageForm> {
   final _formKey = GlobalKey<FormState>();
   List _selectedOptions = [];
+  final Preference inModel = Preference();
 
   LanguageFormState();
 
@@ -104,7 +107,7 @@ class LanguageFormState extends State<LanguageForm> {
                       'Selecione as linguagens da pesquisa.',
                     ),
                     //border: UnderlineInputBorder(borderSide: BorderSide.none,),
-                    dataSource: LANGUAGE_OPTIONS,
+                    dataSource: languageOptions,
                     textField: 'display',
                     valueField: 'value',
                     okButtonLabel: 'OK',
@@ -115,6 +118,7 @@ class LanguageFormState extends State<LanguageForm> {
                       if (value == null) return;
                       setState(() {
                         this._selectedOptions = value;
+                        inModel.language = value.join(',');
                       });
                     },
                   ),
@@ -124,8 +128,17 @@ class LanguageFormState extends State<LanguageForm> {
                     child: RaisedButton(
                       onPressed: () async {
                         if (_formKey.currentState.validate()) {
+                          _formKey.currentState.save();
                           Scaffold.of(context).showSnackBar(SnackBar(
                               content: Text('Consultando API do Github...')));
+                          final FirebaseAuth auth = FirebaseAuth.instance;
+                          inModel.user = auth.currentUser.uid;
+
+                          BlocProvider.of<DatabaseBloc>(context).add(
+                              AddDatabase(
+                                  user: inModel.user,
+                                  language: inModel.language));
+                          _formKey.currentState.reset();
 
                           final datasource = GithubDatasource();
                           final repository = SearchRepositoryImpl(datasource);
@@ -185,7 +198,7 @@ class _DisplayResultsState extends State<DisplayResults> {
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text(UPPER_TITLE),
+          title: Text(appTitle),
         ),
         body: ListView(
           children: [
