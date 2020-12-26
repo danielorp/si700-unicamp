@@ -4,13 +4,14 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:hello_world/modules/search/domain/errors/errors.dart';
 import 'package:multiselect_formfield/multiselect_formfield.dart';
-import 'mainWidget.dart';
 import 'modules/search/domain/entities/result_search.dart';
 import 'modules/search/domain/usecases/search_by_language.dart';
 import 'modules/search/external/datasources/github_datasources.dart';
 import 'modules/search/infra/models/result_search_model.dart';
 import 'modules/search/infra/repositories/search_repository_impl.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+String UPPER_TITLE = 'Trabalho 2';
 
 List LANGUAGE_OPTIONS = [
   {
