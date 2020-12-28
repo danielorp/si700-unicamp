@@ -11,15 +11,15 @@ class NoteList extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<DatabaseBloc, DatabaseState>(
       builder: (context, state) {
-        if (state is NoteDatabaseState) {
-          List<Preference> list = state.notes;
+        if (state is PreferenceDatabaseState) {
+          List<Preference> list = state.preferences;
           return ListView.builder(
               itemCount: list.length,
               itemBuilder: (context, index) {
                 return NoteTile(note: list[index]);
               });
         } else {
-          return Text("Nenhuma nota encontrada.");
+          return Text("Nenhuma preferencia encontrada.");
         }
       },
     );

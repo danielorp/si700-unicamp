@@ -4,7 +4,7 @@ abstract class DatabaseState {}
 
 class UnAuthenticatedDatabaseState extends DatabaseState {}
 
-class NoteDatabaseState extends DatabaseState {
-  List<Preference> notes;
-  NoteDatabaseState(this.notes);
+class PreferenceDatabaseState extends DatabaseState {
+  List<Preference> preferences;
+  PreferenceDatabaseState(this.preferences);
 }

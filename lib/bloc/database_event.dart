@@ -5,16 +5,16 @@ abstract class DatabaseEvent {}
 class UpdateDatabase extends DatabaseEvent {
   String preferenceId;
   String user;
-  String language;
+  int repo;
 
-  UpdateDatabase({this.preferenceId, this.user, this.language});
+  UpdateDatabase({this.preferenceId, this.user, this.repo});
 }
 
 class AddDatabase extends DatabaseEvent {
   String user;
-  String language;
+  int repo;
 
-  AddDatabase({this.user, this.language});
+  AddDatabase({this.user, this.repo});
 }
 
 class DeleteDatabase extends DatabaseEvent {

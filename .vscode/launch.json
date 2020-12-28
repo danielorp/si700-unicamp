@@ -8,7 +8,7 @@
             "name": "flutter-app-1",
             "request": "launch",
             "type": "dart",
-            "args": ["-d", "segundo"]
+            "args": ["-d", "terceiro"]
         }
     ]
 }

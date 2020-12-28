@@ -31,7 +31,7 @@ class _MyHomePageState extends State<Home> {
               label: Text("Sair"))
         ],
       ),
-      body: Center(child: LanguageForm()),
+      body: Center(child: NoteList()),
       drawer: Drawer(
         // Add a ListView to the drawer. This ensures the user can scroll
         // through the options in the drawer if there isn't enough vertical

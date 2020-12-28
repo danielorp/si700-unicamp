@@ -9,11 +9,11 @@ class DatabaseService {
   final CollectionReference preferenceCollection =
       FirebaseFirestore.instance.collection("preferencias");
 
-  addPreference(String user, String language) async {
+  addPreference(String user, int repo) async {
     return await preferenceCollection
         .doc(uid)
         .collection("my_preferences")
-        .add({"user": user, "language": language});
+        .add({"user": user, "repo": repo});
   }
 
   removePreference(String preferenceId) async {
@@ -24,12 +24,12 @@ class DatabaseService {
         .delete();
   }
 
-  updatePreference(String preferenceId, String user, String language) async {
+  updatePreference(String preferenceId, String user, int repo) async {
     return await preferenceCollection
         .doc(uid)
         .collection("my_preferences")
         .doc(preferenceId)
-        .update({"user": user, "language": language});
+        .update({"user": user, "repo": repo});
   }
 
   Stream<List<Preference>> get preferences {

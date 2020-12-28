@@ -1,4 +1,5 @@
 class RepoResult {
+  final String id;
   final String repoUrl;
   final String name;
   final String ownerName;
@@ -7,7 +8,8 @@ class RepoResult {
   final Map<String, dynamic> originalRequest;
 
   RepoResult(
-      {this.repoUrl,
+      {this.id,
+      this.repoUrl,
       this.name,
       this.ownerName,
       this.description,

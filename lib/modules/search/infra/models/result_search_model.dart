@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:hello_world/modules/search/domain/entities/result_search.dart';
 
 class RepoResultModel extends RepoResult {
+  final String id;
   final String repoUrl;
   final String name;
   final String ownerName;
@@ -11,7 +12,8 @@ class RepoResultModel extends RepoResult {
   final Map<String, dynamic> originalRequest;
 
   RepoResultModel(
-      {this.repoUrl,
+      {this.id,
+      this.repoUrl,
       this.name,
       this.ownerName,
       this.description,
@@ -20,6 +22,7 @@ class RepoResultModel extends RepoResult {
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'repoUrl': repoUrl,
       'name': name,
       'ownerName': ownerName,
@@ -32,6 +35,7 @@ class RepoResultModel extends RepoResult {
     if (map == null) return null;
 
     return RepoResultModel(
+        id: map['id'] != null ? map['id'] : '',
         repoUrl: map['html_url'] != null ? map['html_url'] : '',
         name: map['name'] != null ? map['name'] : '',
         ownerName: map['owner']['login'] != null ? map['owner']['login'] : '',

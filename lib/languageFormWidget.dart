@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart' as dartz;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hello_world/bloc/database_state.dart';
 import 'package:hello_world/main.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/gestures.dart';
@@ -9,6 +10,7 @@ import 'package:hello_world/modules/search/domain/errors/errors.dart';
 import 'package:multiselect_formfield/multiselect_formfield.dart';
 import 'bloc/database_bloc.dart';
 import 'bloc/database_event.dart';
+import 'firebase/database.dart';
 import 'models/preference_models.dart';
 import 'modules/search/domain/entities/result_search.dart';
 import 'modules/search/domain/usecases/search_by_language.dart';
@@ -118,7 +120,6 @@ class LanguageFormState extends State<LanguageForm> {
                       if (value == null) return;
                       setState(() {
                         this._selectedOptions = value;
-                        inModel.language = value.join(',');
                       });
                     },
                   ),
@@ -132,14 +133,10 @@ class LanguageFormState extends State<LanguageForm> {
                           Scaffold.of(context).showSnackBar(SnackBar(
                               content: Text('Consultando API do Github...')));
                           final FirebaseAuth auth = FirebaseAuth.instance;
-                          inModel.user = auth.currentUser.uid;
+                          String user = auth.currentUser.uid;
 
-                          BlocProvider.of<DatabaseBloc>(context).add(
-                              AddDatabase(
-                                  user: inModel.user,
-                                  language: inModel.language));
-                          _formKey.currentState.reset();
-
+                          BlocProvider.of<DatabaseBloc>(context)
+                              .add(AddDatabase(user: user, repo: 1334));
                           final datasource = GithubDatasource();
                           final repository = SearchRepositoryImpl(datasource);
                           final dartz.Either<FailureSearch, List<ResultSearch>>
@@ -182,7 +179,7 @@ class _DisplayResultsState extends State<DisplayResults> {
 
   static const List<Widget> _widgetOptions = <Widget>[
     Text(
-      'Index 1: Business',
+      '',
       style: optionStyle,
     )
   ];
@@ -221,11 +218,10 @@ class _DisplayResultsState extends State<DisplayResults> {
         bottomNavigationBar: BottomNavigationBar(
           items: [
             BottomNavigationBarItem(
-                icon: Icon(Icons.collections_bookmark),
-                title: Text('Repositórios')),
+                icon: Icon(Icons.collections_bookmark), label: 'Repositórios'),
             BottomNavigationBarItem(
               icon: Icon(Icons.info_outline),
-              title: Text('Detalhes'),
+              label: 'Detalhes',
             )
           ],
           currentIndex: _selectedIndex,
@@ -235,11 +231,16 @@ class _DisplayResultsState extends State<DisplayResults> {
   }
 }
 
-class LanguageByStarRating extends StatelessWidget {
+class LanguageByStarRating extends StatefulWidget {
   final List<ResultSearchModel> languages;
 
   const LanguageByStarRating({@required this.languages});
 
+  @override
+  _LanguageByStarRatingState createState() => _LanguageByStarRatingState();
+}
+
+class _LanguageByStarRatingState extends State<LanguageByStarRating> {
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -250,7 +251,7 @@ class LanguageByStarRating extends StatelessWidget {
             children: <Widget>[
               SizedBox(height: 20.0),
               Column(children: [
-                for (var item in languages)
+                for (var item in widget.languages)
                   LanguageItem(
                     item: item,
                   )
@@ -263,11 +264,16 @@ class LanguageByStarRating extends StatelessWidget {
   }
 }
 
-class LanguageItem extends StatelessWidget {
+class LanguageItem extends StatefulWidget {
   const LanguageItem({@required this.item});
 
   final ResultSearch item;
 
+  @override
+  _LanguageItemState createState() => _LanguageItemState();
+}
+
+class _LanguageItemState extends State<LanguageItem> {
   @override
   Widget build(BuildContext context) {
     final TextStyle linkStyle = TextStyle(color: Colors.blue);
@@ -275,9 +281,9 @@ class LanguageItem extends StatelessWidget {
     return ExpansionTile(
       tilePadding: EdgeInsets.all(0),
       childrenPadding: EdgeInsets.all(0),
-      title: Text(item.language),
+      title: Text(widget.item.language),
       children: [
-        for (var element in item.repos)
+        for (var element in widget.item.repos)
           ExpansionTile(
             title: Text(element.name),
             trailing: Wrap(spacing: 10, children: [
@@ -291,6 +297,18 @@ class LanguageItem extends StatelessWidget {
               Icon(Icons.arrow_drop_down)
             ]),
             children: [
+              ListTile(
+                  title: Text('Salvar Repositório'),
+                  trailing: IconButton(
+                    icon: Icon(
+                      Icons.favorite_border,
+                      color: Colors.brown[900],
+                    ),
+                    onPressed: () {
+                      String user = FirebaseAuth.instance.currentUser.uid;
+                      DatabaseService(uid: user).addPreference(user, 1);
+                    },
+                  )),
               ListTile(
                 title: Text('Descrição'),
                 subtitle: Text(element.description),
