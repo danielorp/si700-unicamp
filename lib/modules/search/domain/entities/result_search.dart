@@ -1,5 +1,5 @@
 class RepoResult {
-  final String id;
+  final int id;
   final String repoUrl;
   final String name;
   final String ownerName;

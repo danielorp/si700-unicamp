@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:hello_world/modules/search/domain/entities/result_search.dart';
 
 class RepoResultModel extends RepoResult {
-  final String id;
+  final int id;
   final String repoUrl;
   final String name;
   final String ownerName;
