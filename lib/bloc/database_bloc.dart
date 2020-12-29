@@ -21,12 +21,11 @@ class DatabaseBloc extends Bloc<DatabaseEvent, DatabaseState> {
   @override
   Stream<DatabaseState> mapEventToState(DatabaseEvent event) async* {
     if (event is AddDatabase) {
-      _databaseService.addPreference(event.user, event.repo);
+      _databaseService.addPreference(event.repo);
     } else if (event is DeleteDatabase) {
       _databaseService.removePreference(event.docId);
     } else if (event is UpdateDatabase) {
-      _databaseService.updatePreference(
-          event.preferenceId, event.user, event.repo);
+      _databaseService.updatePreference(event.preferenceId, event.repo);
     } else if (event is ReceivedNewList) {
       yield PreferenceDatabaseState(event.preferences);
     }

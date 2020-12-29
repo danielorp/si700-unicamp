@@ -7,44 +7,45 @@ class DatabaseService {
   DatabaseService({this.uid});
 
   final CollectionReference preferenceCollection =
-      FirebaseFirestore.instance.collection("preferencias");
+      FirebaseFirestore.instance.collection("app-2");
 
-  addPreference(String user, int repo) async {
-    return await preferenceCollection
-        .doc(uid)
-        .collection("my_preferences")
-        .add({"user": user, "repo": repo});
+  addPreference(int repo) async {
+    DocumentReference add = await preferenceCollection
+        .doc("preferencias")
+        .collection(uid)
+        .add({"repo": repo});
+    print(add);
   }
 
   removePreference(String preferenceId) async {
     return await preferenceCollection
-        .doc(uid)
-        .collection("my_preferences")
+        .doc("preferencias")
+        .collection(uid)
         .doc(preferenceId)
         .delete();
   }
 
-  updatePreference(String preferenceId, String user, int repo) async {
+  updatePreference(String preferenceId, int repo) async {
     return await preferenceCollection
-        .doc(uid)
-        .collection("my_preferences")
+        .doc("preferencias")
+        .collection(uid)
         .doc(preferenceId)
-        .update({"user": user, "repo": repo});
+        .update({"repo": repo});
   }
 
   Stream<List<Preference>> get preferences {
     return preferenceCollection
-        .doc(uid)
-        .collection("my_preferences")
+        .doc("preferencias")
+        .collection(uid)
         .snapshots()
         .map(_preferenceListFromSnapshot);
   }
 
   List<Preference> _preferenceListFromSnapshot(QuerySnapshot snapshot) {
-    List<Preference> notes = List();
+    List<Preference> preferences = List();
     for (var doc in snapshot.docs) {
-      notes.add(Preference.fromMap(doc.id, doc.data()));
+      preferences.add(Preference.fromMap(doc.id, doc.data()));
     }
-    return notes;
+    return preferences;
   }
 }

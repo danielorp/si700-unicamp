@@ -17,7 +17,7 @@ class Wrapper extends StatelessWidget {
               create: (context) {
                 return DatabaseBloc(state.user.uid);
               },
-              child: Home());
+              child: Home(state: state));
         } else {
           return Authenticate();
         }

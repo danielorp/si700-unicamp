@@ -2,21 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hello_world/bloc/auth_bloc.dart';
 import 'package:hello_world/bloc/auth_event.dart';
+import 'package:hello_world/bloc/auth_state.dart';
 import 'package:hello_world/languageFormWidget.dart';
 import 'package:hello_world/main.dart';
 import 'package:hello_world/views/Home/note_entry.dart';
 import 'package:hello_world/views/Home/note_list.dart';
 
 class Home extends StatefulWidget {
-  Home({Key key, this.title}) : super(key: key);
+  Home({Key key, this.title, this.state}) : super(key: key);
 
   final String title;
+  final AuthState state;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _MyHomePageState createState() => _MyHomePageState(state);
 }
 
 class _MyHomePageState extends State<Home> {
+  final AuthState state;
+
+  _MyHomePageState(this.state);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +36,7 @@ class _MyHomePageState extends State<Home> {
               label: Text("Sair"))
         ],
       ),
-      body: Center(child: LanguageForm()),
+      body: Center(child: LanguageForm(state: this.state)),
       drawer: Drawer(
         // Add a ListView to the drawer. This ensures the user can scroll
         // through the options in the drawer if there isn't enough vertical
@@ -49,8 +54,15 @@ class _MyHomePageState extends State<Home> {
             ListTile(
               title: Text('Repositórios Salvos'),
               onTap: () {
-                setState(() {});
                 Navigator.pop(context);
+                setState(() {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              DisplayResults(state: this.state)));
+                });
+                Navigator.of(context).pop();
               },
             )
           ],

@@ -1,6 +1,8 @@
 import 'package:hello_world/models/user_model.dart';
 
-abstract class AuthState {}
+abstract class AuthState {
+  get user => null;
+}
 
 class Unauthenticated extends AuthState {}
 
