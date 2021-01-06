@@ -50,20 +50,6 @@ class _MyHomePageState extends State<Home> {
               decoration: BoxDecoration(
                 color: Colors.blue,
               ),
-            ),
-            ListTile(
-              title: Text('Repositórios Salvos'),
-              onTap: () {
-                Navigator.pop(context);
-                setState(() {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              DisplayResults(state: this.state)));
-                });
-                Navigator.of(context).pop();
-              },
             )
           ],
         ),

@@ -24,46 +24,65 @@ List languageOptions = [
   {
     "display": "JavaScript",
     "value": "JavaScript",
+    "image":
+        "https://i0.wp.com/pt.mundobabushka.com/wp-content/uploads/sites/5/2016/03/js-logo.png",
   },
   {
     "display": "Python",
     "value": "Python",
+    "image":
+        "https://minerandodados.com.br/wp-content/uploads/2017/02/python-logo.png",
   },
   {
     "display": "Java",
     "value": "Java",
+    "image":
+        "https://seeklogo.com/images/J/java-logo-7F8B35BAB3-seeklogo.com.png"
   },
   {
     "display": "Go",
     "value": "Go",
+    "image":
+        "https://www.kindpng.com/picc/m/599-5995612_golang-logo-hd-png-download.png"
   },
   {
     "display": "TypeScript",
     "value": "TypeScript",
+    "image": "https://miro.medium.com/max/816/1*mn6bOs7s6Qbao15PMNRyOA.png"
   },
   {
     "display": "C++",
     "value": "CPP",
+    "image":
+        "https://raw.githubusercontent.com/isocpp/logos/master/cpp_logo.png"
   },
   {
     "display": "Ruby",
     "value": "Ruby",
+    "image":
+        "https://www.logolynx.com/images/logolynx/eb/eb3d4c30c8359f880a7898e15d86d377.jpeg"
   },
   {
     "display": "PHP",
     "value": "PHP",
+    "image": "https://pngimg.com/uploads/php/php_PNG7.png"
   },
   {
     "display": "C#",
     "value": "CSHARP",
+    "image":
+        "https://www.secret-source.eu/wp-content/uploads/2017/11/C-sharp-logo.jpg"
   },
   {
     "display": "C",
     "value": "C",
+    "image":
+        "https://cdn.iconscout.com/icon/free/png-512/c-programming-569564.png"
   },
   {
     "display": "Dart",
     "value": "Dart",
+    "image": "https://upload.wikimedia.org/wikipedia/pt/7/7e/Dart-logo.png"
   },
 ];
 
@@ -230,8 +249,8 @@ class _DisplayResultsState extends State<DisplayResults> {
             BottomNavigationBarItem(
                 icon: Icon(Icons.collections_bookmark), label: 'Repositórios'),
             BottomNavigationBarItem(
-              icon: Icon(Icons.info_outline),
-              label: 'Detalhes',
+              icon: Icon(Icons.lock),
+              label: '',
             )
           ],
           currentIndex: _selectedIndex,
@@ -254,11 +273,23 @@ class _LanguageItemState extends State<LanguageItem> {
   @override
   Widget build(BuildContext context) {
     final TextStyle linkStyle = TextStyle(color: Colors.blue);
+    var lista = languageOptions
+        .where((item) => item['display'] == widget.item.language)
+        .toList();
 
     return ExpansionTile(
-      tilePadding: EdgeInsets.all(0),
+      tilePadding: EdgeInsets.all(10),
       childrenPadding: EdgeInsets.all(0),
       title: Text(widget.item.language),
+      leading: ConstrainedBox(
+        constraints: BoxConstraints(
+          minWidth: 44,
+          minHeight: 44,
+          maxWidth: 64,
+          maxHeight: 64,
+        ),
+        child: Image.network(lista[0]['image']),
+      ),
       children: [
         for (var element in widget.item.repos)
           ExpansionTile(
